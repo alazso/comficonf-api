@@ -1,0 +1,100 @@
+# ComfiConfDemo configuration.
+#
+# Edit this file by hand and run /vouchers reload, or edit it on the ComfiConf website when the
+# ComfiConf bridge plugin is installed. Changes made on the website keep these comments and every
+# key the website does not show, such as config-version, metrics and voucher lore.
+
+# Layout version of this file. Not editable on the website.
+config-version: 3
+
+# Anonymous usage statistics. Not editable on the website.
+metrics:
+  enabled: false
+  report-interval-minutes: 30
+
+settings:
+  # MiniMessage text shown before every voucher message.
+  prefix: "<gold>[Vouchers]</gold> "
+  # Tell other players when someone redeems a voucher.
+  announce-redemptions: true
+  # Where announcements appear: chat, actionbar and/or title.
+  announcement-channels:
+    - chat
+  # Vouchers one player can redeem per day. 0 means no limit.
+  max-redemptions-per-day: 5
+  # Multiplier applied to every reward.
+  bonus-multiplier: 1.5
+  # Where redemption history is stored: yaml or sqlite. Takes effect after a restart.
+  storage-mode: yaml
+  # Worlds in which vouchers cannot be redeemed.
+  disabled-worlds:
+    - world_nether
+  # Optional https:// webhook notified on every redemption. ComfiConf never shows its value.
+  webhook-url: ""
+  # MiniMessage text sent to players when they join.
+  welcome-message: |-
+    <gold>Welcome!</gold> Daily, weekly and monthly vouchers are waiting for you.
+    Type <yellow>/vouchers</yellow> to see them.
+
+# Vouchers by id. Each id is the key of its section; lore lines appear in the voucher's tooltip.
+vouchers:
+  daily:
+    display-name: Daily Reward
+    enabled: true
+    material: SUNFLOWER
+    cooldown-seconds: 86400
+    permission: vouchers.daily
+    weight: 100
+    rarity: common
+    lore:
+      - Claim once every day.
+  weekly:
+    display-name: Weekly Chest
+    enabled: true
+    material: CHEST
+    cooldown-seconds: 604800
+    permission: vouchers.weekly
+    weight: 50
+    rarity: rare
+    lore:
+      - A bigger reward every week.
+  monthly:
+    display-name: Monthly Vault
+    enabled: true
+    material: ENDER_CHEST
+    cooldown-seconds: 604800
+    permission: vouchers.monthly
+    weight: 20
+    rarity: epic
+    lore:
+      - Open it when the week is over.
+  starter:
+    display-name: Starter Kit
+    enabled: true
+    material: WOODEN_SWORD
+    cooldown-seconds: 300
+    permission: vouchers.starter
+    weight: 200
+    rarity: common
+    lore:
+      - Everything a new player needs.
+  vip:
+    display-name: VIP Bundle
+    enabled: true
+    material: DIAMOND
+    cooldown-seconds: 43200
+    permission: vouchers.vip
+    weight: 10
+    rarity: legendary
+    lore:
+      - Thanks for supporting the server.
+  event:
+    display-name: Event Token
+    enabled: false
+    material: NETHER_STAR
+    cooldown-seconds: 3600
+    permission: vouchers.event
+    weight: 5
+    rarity: epic
+    lore:
+      - Only during server events.

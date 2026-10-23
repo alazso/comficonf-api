@@ -1,0 +1,13 @@
+# Gradle / Java
+java/.gradle/
+java/**/build/
+examples/**/build/
+examples/**/.gradle/
+*.class
+
+# IDEs
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.iml
+.DS_Store

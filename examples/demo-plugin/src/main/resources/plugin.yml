@@ -1,0 +1,18 @@
+name: ComfiConfDemo
+main: com.comficonf.demo.ComfiConfDemoPlugin
+version: '${version}'
+api-version: '26.1'
+description: Reference voucher plugin whose settings can be edited with ComfiConf.
+softdepend: [ComfiConf]
+commands:
+  vouchers:
+    description: Lists vouchers, shows settings and simulates redemptions.
+    usage: /vouchers [info <id>|settings|redeem <id> <player>|status|reload]
+    permission: comficonf.demo.use
+permissions:
+  comficonf.demo.use:
+    description: Allows /vouchers.
+    default: true
+  comficonf.demo.admin:
+    description: Allows /vouchers reload and receives configuration change notices.
+    default: op
