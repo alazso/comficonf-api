@@ -4,8 +4,8 @@ This guide shows how to make the settings of your Paper plugin editable on the C
 through the reference plugin in `examples/demo-plugin` (ComfiConfDemo, a voucher plugin) and documents every
 part of the developer API you need.
 
-The normative definition is the Javadoc of `java/api`. When this guide and the Javadoc disagree, the Javadoc
-wins.
+The normative definition is the Javadoc of `java/api`, published at
+https://javadoc.io/doc/com.comficonf/comficonf-api. When this guide and the Javadoc disagree, the Javadoc wins.
 
 ## Contents
 
@@ -71,15 +71,8 @@ contains exactly one copy of `com.comficonf.api`. Your plugin compiles against t
 A shaded copy creates a second set of API classes that the bridge cannot see; see
 [Troubleshooting](#18-troubleshooting).
 
-Until the API is published to a public repository, install it into your local Maven repository from a checkout
-of this project:
-
-```sh
-cd java
-./gradlew :api:publishToMavenLocal
-```
-
-This installs `com.comficonf:comficonf-api:0.1.0` (with sources and Javadoc) into `~/.m2/repository`.
+The API is on Maven Central as `com.comficonf:comficonf-api`, with its sources and Javadoc, so no extra repository
+is needed for it.
 
 ### Gradle (Kotlin DSL)
 
@@ -89,7 +82,6 @@ plugins {
 }
 
 repositories {
-    mavenLocal()
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
 }
@@ -139,8 +131,8 @@ part of the shadow JAR. Do not move the API to `implementation` "to make it work
 </dependencies>
 ```
 
-Maven reads `~/.m2/repository` by default, so `publishToMavenLocal` is enough. If you use the
-`maven-shade-plugin`, `provided` dependencies are not included.
+Maven resolves the API from Maven Central, its default repository; only Paper needs the `papermc` repository. If
+you use the `maven-shade-plugin`, `provided` dependencies are not included.
 
 ## 4. Declaring the soft dependency
 

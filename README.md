@@ -13,6 +13,7 @@ the real result: applied, saved but waiting for a restart, rejected, or a confli
 | --- | --- |
 | [developers.comficonf.com](https://developers.comficonf.com) | Plugin developers: the API, schemas, providers, persistence, testing and the demo plugin |
 | [docs.comficonf.com](https://docs.comficonf.com) | Server owners: installing and pairing the bridge, the editor, apply results, what leaves the server |
+| [javadoc.io](https://javadoc.io/doc/com.comficonf/comficonf-api) | The Javadoc of `com.comficonf:comficonf-api`, the normative API reference |
 
 This repository is for plugin developers. It contains:
 
@@ -27,9 +28,23 @@ repository.
 
 ## Getting started
 
-Start with the [Quickstart](https://developers.comficonf.com/quickstart). It covers adding the API to your build
-(as `compileOnly`, never shaded), the `softdepend` on ComfiConf, the optional hook that keeps your plugin working
-without the bridge, and registering a configuration resource. The rest of
+The API is on Maven Central. Add it as `compileOnly` (Gradle) or `provided` (Maven), never shaded:
+
+```kotlin
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/")
+}
+
+dependencies {
+    compileOnly("io.papermc.paper:paper-api:26.1.2.build.74-stable")
+    compileOnly("com.comficonf:comficonf-api:0.1.0")
+}
+```
+
+Then follow the [Quickstart](https://developers.comficonf.com/quickstart). It covers the Maven setup, the
+`softdepend` on ComfiConf, the optional hook that keeps your plugin working without the bridge, and registering a
+configuration resource. The rest of
 [developers.comficonf.com](https://developers.comficonf.com) documents every schema builder, the provider callbacks,
 threading, `SafeFileWriter` and `SectionMapper`, with ComfiConfDemo as the worked example. Your plugin keeps full
 control: it validates, saves its own files and activates changes, and it keeps working on servers without ComfiConf.
@@ -53,7 +68,8 @@ On Windows, run `gradlew.bat build` in `java`. The build runs all tests and prod
 | `java/api/build/libs/comficonf-api-<version>.jar` | The developer API, with sources and Javadoc JARs |
 | `examples/demo-plugin/build/libs/ComfiConfDemo-<version>.jar` | The demo plugin |
 
-`./gradlew :api:publishToMavenLocal` installs the API into your local Maven repository.
+To try a change to the API in your own plugin before it is released, `./gradlew :api:publishToMavenLocal`
+installs it into your local Maven repository; add `mavenLocal()` to your plugin's repositories to use it.
 
 ## Security
 
