@@ -315,8 +315,9 @@ class VoucherConfigProviderTest {
     @Test
     void reportsAStorageModeChangeFromAnInvalidOrMissingStoredValue() throws Exception {
         String original = Files.readString(configFile);
-        for (String stored : List.of("  storage-mode: 5\n", "")) {
-            Files.writeString(configFile, original.replace("  storage-mode: yaml\n", stored));
+        // Only the text of the line is replaced: config.yml has CRLF line breaks in a Windows checkout.
+        for (String stored : List.of("  storage-mode: 5", "")) {
+            Files.writeString(configFile, original.replace("  storage-mode: yaml", stored));
             ConfigSnapshot current = provider.read();
             assertThat(current.values().get("settings.storage-mode")).isEqualTo(stored.isEmpty() ? null : "5");
 

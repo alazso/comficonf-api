@@ -28,9 +28,10 @@ class VoucherConfigMappingTest {
     }
 
     static byte[] configWithUnknownKeys() throws IOException {
+        // $1 is the line break before the comment, so the inserted line uses the file's CRLF or LF line breaks.
         String text = new String(defaultConfig(), StandardCharsets.UTF_8)
-                .replace("  # MiniMessage text shown before every voucher message.\n",
-                        "  legacy-colors: false\n  # MiniMessage text shown before every voucher message.\n");
+                .replaceFirst("(\\R)(  # MiniMessage text shown before every voucher message\\.)",
+                        "$1  legacy-colors: false$1$2");
         assertThat(text).contains("legacy-colors: false");
         return text.getBytes(StandardCharsets.UTF_8);
     }

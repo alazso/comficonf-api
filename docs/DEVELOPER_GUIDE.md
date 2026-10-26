@@ -832,8 +832,9 @@ them (see [section 15](#15-sensitive-fields)).
 
 ## 12. Revisions, backups and SafeFileWriter
 
-A revision is an opaque string of 1 to 128 printable ASCII characters without spaces. For file-backed
-configuration, use the content hash:
+A revision is an opaque string of 1 to 128 printable ASCII characters without spaces. It stays on the server: the
+editor only sees a keyed token of it, while `ApplyContext.baseRevision()` and the revisions you return in
+`ApplyResult` are your own. For file-backed configuration, use the content hash:
 
 | Helper | Use |
 | --- | --- |
@@ -907,7 +908,10 @@ What the bridge does around your `apply`:
   message and stack trace go to the server log. Parser exceptions embed file content (SnakeYAML quotes the
   offending line, which can be a password), so this applies to `describe`, `read`, `validate` and `apply`
   alike. To show the owner an explanation, return it: `ValidationResult` issues, `ApplyResult.rejected(message)`
-  or `ApplyResult.failed(message)`, and keep secrets and configuration values out of those messages.
+  or `ApplyResult.failed(message)`, and keep secrets and configuration values out of those messages. As a
+  backstop, the bridge replaces with `[secret]` every stored or submitted sensitive value of 4 or more characters
+  and every recognized secret (Discord and Slack webhook URLs, a password inside a connection URL, a `password=`
+  parameter) in issue messages, apply messages, change labels and item keys before they leave the server.
 - Every outcome is cached for 15 minutes under the operation id, so a retried submission returns the cached result
   instead of applying twice.
 - After `APPLIED` or `SAVED_RESTART_REQUIRED`, open editors are told that the resource changed.
@@ -931,8 +935,10 @@ Use them for webhooks, tokens, passwords and similar secrets.
   booleans, so a numeric password, PIN or channel id arrives as an `Integer` or `Long`. `SectionMapper.read`
   converts it to text; without it, convert it with `String.valueOf` in `read()`. The bridge keeps such a value
   unchanged when the field is omitted and logs a warning, but a replacement from the editor is always a `String`.
-- Changes of sensitive fields are reported without before and after values. The bridge never logs values; do not
-  log them in your plugin either.
+- Changes of sensitive fields are reported without before and after values. A submitted replacement is always a
+  change, also when it equals the stored value, so reviewing changes never confirms a guessed value; your `apply`
+  then receives a change for the field with an unchanged value. The bridge never logs values; do not log them in
+  your plugin either.
 - A secret that is "unset" in your file (the demo stores `webhook-url: ""`) should be returned as `null` from
   `read()` and written back from `null` in `apply`. `SectionMapper` does this for optional text fields.
 
@@ -1101,11 +1107,9 @@ Catching `LinkageError` around the registration, as in section 5, keeps your plu
 
 **The bridge does not connect**
 
-Run `/comficonf status`. The bridge connects to ComfiConf at `wss://app.comficonf.com/api/v1/bridge`. For a local or
-self-hosted backend, add `backend-url` and `web-url` to `plugins/ComfiConf/config.yml`. `ws://` is accepted only for `localhost`, `127.0.0.1` and `::1` unless
-`allow-insecure-connections: true`; production uses `wss://`. After editing `plugins/ComfiConf/config.yml`, run
-`/comficonf reconnect`. While the backend is unreachable the bridge keeps retrying with backoff (up to one minute)
-and logs a warning only when the error changes or every ten minutes.
+Run `/comficonf status`. The bridge connects to ComfiConf at `wss://app.comficonf.com/api/v1/bridge`. After
+editing `plugins/ComfiConf/config.yml`, run `/comficonf reconnect`. While the backend is unreachable the bridge
+keeps retrying with backoff (up to one minute) and logs a warning only when the error changes or every ten minutes.
 
 ## 19. Checklist
 

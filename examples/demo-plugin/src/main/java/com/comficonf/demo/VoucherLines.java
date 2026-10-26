@@ -4,7 +4,7 @@ import com.comficonf.demo.config.Voucher;
 import com.comficonf.demo.config.VoucherRuntime;
 import com.comficonf.demo.config.VoucherSettings;
 
-/** Single-line, machine-readable command output, so that tests can read results from the server log. */
+/** Single-line, machine-readable command output that can be read back from the server log. */
 public final class VoucherLines {
 
     private VoucherLines() {

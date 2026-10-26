@@ -20,7 +20,7 @@ rootProject.name = "comficonf-java"
 include("api", "demo-plugin")
 project(":demo-plugin").projectDir = file("../examples/demo-plugin")
 
-// The public repository (scripts/export-public.mjs) contains no bridge.
+// The bridge is closed source and not part of the public API repository.
 if (file("bridge").isDirectory) {
     include("bridge")
 }

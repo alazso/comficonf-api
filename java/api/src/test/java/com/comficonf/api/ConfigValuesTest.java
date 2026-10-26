@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 class ConfigValuesTest {
 
     @Test
-    void parsesPathsLikeTheSharedTypeScriptHelper() {
+    void parsesAndBuildsPaths() {
         assertThat(ConfigPath.parse("vouchers[2].cooldown-seconds")).containsExactly("vouchers", 2, "cooldown-seconds");
         assertThat(ConfigPath.parse("")).isEmpty();
         assertThat(ConfigPath.parse("grid[0][12].cell")).containsExactly("grid", 0, 12, "cell");
