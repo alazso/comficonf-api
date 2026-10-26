@@ -12,6 +12,14 @@ dependencyResolutionManagement {
         maven("https://repo.papermc.io/repository/maven-public/") {
             name = "papermc"
         }
+        if (file("bridge").isDirectory) {
+            maven("https://repo.faststats.dev/releases") {
+                name = "faststats"
+                content {
+                    includeGroup("dev.faststats.metrics")
+                }
+            }
+        }
     }
 }
 
